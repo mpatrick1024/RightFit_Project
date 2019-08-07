@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
+import random
 
 from .models import *
 # Create your views here.
@@ -20,7 +21,7 @@ def register (request):
         User.objects.create(first_name=request.POST["first_name"], last_name=request.POST["last_name"], email=request.POST["email"], password=request.POST["password"])
         last_user = User.objects.last()
         request.session["user_id"]= last_user.id
-    return redirect('/success')
+    return redirect('/loading')
 
 def login (request):
     login_errors = User.objects.login_validator(request.POST)
@@ -34,14 +35,14 @@ def login (request):
     else:
         user = User.objects.get(email=request.POST["email"])
         request.session["user_id"]= user.id
-        return redirect('/success')
+        return redirect('/accountpage')
     
-    def edit_account(request):
+def accountpage (request):
         user = User.objects.get(id=request.session["user_id"])
-    context = {
+        context = {
         "user" : user
     }
-    return render(request, 'rightfit_app/edit_account.html', context)
+        return render(request, 'rightfit_app/accountpage.html', context)
 
 def account_edit_form(request):
         user_update = User.objects.get(id=request.session["user_id"])
@@ -52,4 +53,22 @@ def account_edit_form(request):
         user_update.education_interest= request.POST["education_interest"]
         user_update.school_int= request.POST["school_int"]
         user_update.save()
-        return redirect('/edit_account')
+        return redirect('/')
+    
+def loading(request):
+    all_quotes = Quote.objects.all()
+    index = random.randint(0, len(all_quotes))
+    quote = all_quotes[index]
+    context ={
+        "quote" : quote
+    }
+    return render(request, 'rightfit_app/loading.html', context )
+
+def schoolchoices(request):
+    all_quotes = Quote.objects.all()
+    index = random.randint(0, len(all_quotes))
+    quote = all_quotes[index]
+    context ={
+        "quote" : quote
+    }
+    return render(request, 'rightfit_app/schoolchoices.html', context)
