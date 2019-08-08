@@ -35,12 +35,16 @@ def login (request):
     else:
         user = User.objects.get(email=request.POST["email"])
         request.session["user_id"]= user.id
-        return redirect('/accountpage')
+        return redirect('/loading')
     
 def accountpage (request):
         user = User.objects.get(id=request.session["user_id"])
+        all_quotes = Quote.objects.all()
+        index = random.randint(0, len(all_quotes)-1)
+        quote = all_quotes[index]
         context = {
-        "user" : user
+        "user" : user,
+        "quote" : quote
     }
         return render(request, 'rightfit_app/accountpage.html', context)
 
@@ -57,7 +61,7 @@ def account_edit_form(request):
     
 def loading(request):
     all_quotes = Quote.objects.all()
-    index = random.randint(0, len(all_quotes))
+    index = random.randint(0, len(all_quotes)-1)
     quote = all_quotes[index]
     context ={
         "quote" : quote
@@ -66,7 +70,7 @@ def loading(request):
 
 def schoolchoices(request):
     all_quotes = Quote.objects.all()
-    index = random.randint(0, len(all_quotes))
+    index = random.randint(0, len(all_quotes)-1)
     quote = all_quotes[index]
     context ={
         "quote" : quote
