@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
+import random
 
 from .models import *
 # Create your views here.
@@ -25,7 +26,7 @@ def register (request):
         last_user = User.objects.last()
         request.session["user_id"]= last_user.id
         request.session["user_name"]= last_user.first_name
-    return redirect('/success')
+    return redirect('/loading')
 
 def login (request):
     login_errors = User.objects.login_validator(request.POST)
@@ -39,25 +40,47 @@ def login (request):
     else:
         user = User.objects.get(email=request.POST["email"])
         request.session["user_id"]= user.id
-        return redirect('/success')
+        return redirect('/loading')
     
-    def edit_account(request):
+def accountpage (request):
         user = User.objects.get(id=request.session["user_id"])
-    context = {
-        "user" : user
+        all_quotes = Quote.objects.all()
+        index = random.randint(0, len(all_quotes)-1)
+        quote = all_quotes[index]
+        context = {
+        "user" : user,
+        "quote" : quote
     }
-    return render(request, 'rightfit_app/edit_account.html', context)
+        return render(request, 'rightfit_app/accountpage.html', context)
 
 def account_edit_form(request):
-    user_update = User.objects.get(id=request.session["user_id"])
-    user_update.first_name= request.POST["first_name"]
-    user_update.last_name= request.POST["last_name"]
-    user_update.email= request.POST["email"]
-    user_update.activities= request.POST["activities"]
-    user_update.education_interest= request.POST["education_interest"]
-    user_update.school_int= request.POST["school_int"]
-    user_update.save()
-    return redirect('/edit_account')
+        user_update = User.objects.get(id=request.session["user_id"])
+        user_update.first_name= request.POST["first_name"]
+        user_update.last_name= request.POST["last_name"]
+        user_update.email= request.POST["email"]
+        user_update.activities= request.POST["activities"]
+        user_update.education_interest= request.POST["education_interest"]
+        user_update.school_int= request.POST["school_int"]
+        user_update.save()
+        return redirect('/')
+    
+def loading(request):
+    all_quotes = Quote.objects.all()
+    index = random.randint(0, len(all_quotes)-1)
+    quote = all_quotes[index]
+    context ={
+        "quote" : quote
+    }
+    return render(request, 'rightfit_app/loading.html', context )
+
+def schoolchoices(request):
+    all_quotes = Quote.objects.all()
+    index = random.randint(0, len(all_quotes)-1)
+    quote = all_quotes[index]
+    context ={
+        "quote" : quote
+    }
+    return render(request, 'rightfit_app/schoolchoices.html', context)
 
 def profile (request):
     user = User.objects.get (id=request.session["user_id"])

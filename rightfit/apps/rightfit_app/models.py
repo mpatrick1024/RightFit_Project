@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+from django.contrib.auth.models import User as Admin
 
 # Create your models here.
 class UserManager (models.Manager):
@@ -45,23 +46,29 @@ class User(models.Model):
     first_name = models.CharField(max_length = 45)
     last_name = models.CharField(max_length = 45)
     email = models.EmailField(max_length = 254)
-    password = models.CharField(max_length = 45)    
-    gpa = models.DecimalField(max_digits=3, decimal_places=2)
+    password = models.CharField(max_length = 45) 
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    objects = UserManager() 
+    
+class Account(models.Model):     
+    gpa = models.DecimalField(max_digits = 3, decimal_places = 2)
     test_score = models.IntegerField()
-    activities = models.CharField(max_length = 254)
-    education_interest = models.CharField(max_length = 254)
-    school_int =  models.CharField(max_length = 254)
+    activities = models.CharField( max_length = 254)
+    education_interest = models.CharField( max_length = 254)
+    school_int =  models.CharField( max_length = 254)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     objects = UserManager()
-        
+    
 class School(models.Model):
     name = models.CharField(max_length = 45) 
     enrollment = models.CharField(max_length = 254)
     sports = models.CharField(max_length = 254)
     avg_test_score = models.IntegerField()
-    gpa = models.DecimalField(max_digits=3, decimal_places=2)
+    gpa = models.DecimalField(max_digits = 3, decimal_places = 2)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
         
-# class Activity(models.Model):
+class Quote(models.Model):
+    text = models.TextField()

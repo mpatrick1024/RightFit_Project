@@ -1,38 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Right Fit</title>
+    <style>
+        a {
+            margin-left: 980px;
+        }
+
+        .space1 h5 {
+            text-align: end;
+        }
+
+        .space1 {
+            background-color: rgb(105, 105, 105);
+        }
+
+        .space2 {
+            background-color: rgb(170, 169, 169);
+            height: 30px;
+        }
+
+        .space3 {
+            background-color: rgb(226, 224, 224);
+            height: 20px;
+        }
+    </style>
 </head>
+
 <body>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <label for="first_name">First Name</label>
-        <input type="text" name="first_name" class="form-control mb-3" placeholder="{{user.first_name}}"><br>
-        <label for="last_name">Last Name</label>
-        <input type="text" name="last_name" class="form-control mb-3" placeholder="{{user.last_name}}"><br>
-        <label for="gpa">GPA</label>
-        <input type="number" name="gpa" class= "form-control mb-3">
-        <label for="test_score">Test Score</label>
-        <input type="number" name="test_score" class= "form-control mb-3">
-        <label for="activities">Activities</label>
-        <input type="text"  name="activities" class= "form-control mb-3">
-        <label for="education_interest">Education Interests
-        </label>
-        <input type="text"  name="education_interest" class= "form-control mb-3">
-        <label for="activities">Activities</label>
-        <select name="activities" id=""><option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-        
-        </select>
-    </form> 
+
+    <div class="container vh-100 p-0 my-3 text-light">
+        <div class="bg-dark">
+            <div class="space1 text-dark">
+                <h5 class="mb-0 pt-3 pr-3">Right Fit</h5>
+                <h5 class="mb-0 pb-3 pr-3">Schools Fit 4 You</h5>
+            </div>
+            <div class="space2"></div>
+            <div class="space3"></div>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            <h1 class="text-center">Complete Registration</h1>
+            <br> <a href="/"> Log Out</a><br>
+            <div class="form1  m-3  w-50  h-50 d-inline-block ">
+                <form action="/schoolchoices" method="POST">
+                    {% csrf_token %}
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" class="form-control mb-3"
+                        placeholder="{{user.first_name}}"><br>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" class="form-control mb-3" placeholder="{{user.last_name}}"><br>
+                    <label for="gpa">GPA</label>
+                    <input type="text" name="gpa" class="form-control mb-3">
+                    <label for="test_score">NWEA Score</label>
+                    <input type="text" name="test_score" class="form-control mb-3">
+                    <label for="activities">Extracurricular Activities</label>
+                    <input type="text" name="activities" class="form-control mb-3">
+                    <label for="education_interest">Educational Interests
+                    </label>
+                    <input type="text" name="education_interest" class="form-control mb-3">
+
+                    <label for="school_int">First School Choice</label>
+                    <select name="school_int" class="custom-select mb-3">
+                        <option selected>School #1</option>
+                        <option value="young"> Young Magnet High School</option>
+                        <option value="jones">Jones College Prep High School</option>
+                        <option value="lindblom">Lindblom Math & Science Academy</option>
+                        <option value="kenwood">Kenwood Academy High School</option>
+                        <option value="morgan">Morgan Park High School</option>
+                        <option value="simeon">Simeon Career Academy High School</option>
+
+                    </select>
+
+                    <label for="school_int">Second School Choice</label>
+                    <select name="school_int" class="custom-select mb-3">
+                        <option selected>School #2</option>
+                        <option value="young"> Young Magnet High School</option>
+                        <option value="jones">Jones College Prep High School</option>
+                        <option value="lindblom">Lindblom Math & Science Academy</option>
+                        <option value="kenwood">Kenwood Academy High School</option>
+                        <option value="morgan">Morgan Park High School</option>
+                        <option value="simeon">Simeon Career Academy High School</option>
+
+                    </select>
+
+                    <label for="school_int">Third School Choice</label><br>
+                    <select name="school_int" class="custom-select mb-3"><br>
+                        <option selected>School #3</option>
+                        <option value="young"> Young Magnet High School</option>
+                        <option value="jones">Jones College Prep High School</option>
+                        <option value="lindblom">Lindblom Math & Science Academy</option>
+                        <option value="kenwood">Kenwood Academy High School</option>
+                        <option value="morgan">Morgan Park High School</option>
+                        <option value="simeon">Simeon Career Academy High School</option>
+
+                    </select>
+
+                    <input type="submit" value="Done" class="btn btn-secondary btn-lg">
+                </form>
+            </div>
+            <h6 class="my-3 text-center">{{ quote.text }} </h6>
+        </div>
+    </div>
 </body>
+
 </html>
