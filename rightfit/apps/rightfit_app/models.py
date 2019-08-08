@@ -28,35 +28,40 @@ class UserManager (models.Manager):
     def login_validator(self, postData):
         login_errors = {}
         # add keys and values to errors dictionary for each invalid field
-        user_to_login= User.objects.get(email=postData["email"])
-        
-        if user_to_login.password != postData['login_password']:
-            login_errors["invalid"] = "Invaild login credentials"
+        user_to_login= User.objects.filter(email=postData["email"])
+        if len(postData['email']) == 0:
+            print ('Did not find email in database')
+            login_errors['invalid'] = 'Invalid login credentials'
         else:
-            print("password accepted, logging in ...")
+            user = User.objects.get (email = postData['email'])
+            if postData['password'] == user.password:
+                print('Valid password, Login Success')
+            else:
+                print("Invalid password, Login Unsuccessful")
+                login_errors['invalid'] = "Invalid login credentials."
         return login_errors
     
-    class User(models.Model):
-        first_name = models.CharField(max_length = 45)
-        last_name = models.CharField(max_length = 45)
-        email = models.EmailField(max_length = 254)
-        password = models.CharField(max_length = 45)    
-        gpa = models.DecimalField()
-        test_score = models.IntegerField()
-        activities = models.CharField( max_length = 254)
-        education_interest = models.CharField( max_length = 254)
-        school_int =  models.CharField( max_length = 254)
-        created_at = models.DateTimeField(auto_now_add = True)
-        updated_at = models.DateTimeField(auto_now = True)
-        objects = UserManager()
+class User(models.Model):
+    first_name = models.CharField(max_length = 45)
+    last_name = models.CharField(max_length = 45)
+    email = models.EmailField(max_length = 254)
+    password = models.CharField(max_length = 45)    
+    gpa = models.DecimalField(max_digits=3, decimal_places=2)
+    test_score = models.IntegerField()
+    activities = models.CharField(max_length = 254)
+    education_interest = models.CharField(max_length = 254)
+    school_int =  models.CharField(max_length = 254)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    objects = UserManager()
         
-    class School(models.Model):
-        name = models.CharField(max_length = 45) 
-        enrollment = models.CharField(max_length = 254)
-        sports = models.CharField(max_length = 254)
-        avg_test_score = models.IntegerField()
-        gpa = models.DecimalField()
-        created_at = models.DateTimeField(auto_now_add = True)
-        updated_at = models.DateTimeField(auto_now = True)
+class School(models.Model):
+    name = models.CharField(max_length = 45) 
+    enrollment = models.CharField(max_length = 254)
+    sports = models.CharField(max_length = 254)
+    avg_test_score = models.IntegerField()
+    gpa = models.DecimalField(max_digits=3, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
         
-    class Activity(models.Model):
+# class Activity(models.Model):
