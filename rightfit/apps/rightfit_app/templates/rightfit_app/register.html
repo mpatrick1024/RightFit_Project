@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Right Fit</title>
+    <style>
+            * {
+                vertical-align: top;
+                box-sizing: border-box;
+            }
+    
+            .space1 h5 {
+                text-align: end;
+            }
+    
+            .space1 {
+                background-color: rgb(105, 105, 105);
+            }
+    
+            .space2 {
+                background-color: rgb(170, 169, 169);
+                height: 30px;
+            }
+    
+            .space3 {
+                background-color: rgb(226, 224, 224);
+                height: 20px;
+            }
+        </style>
+</head>
+
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        {%if 'errors' in message.extra_tags%}
+
+        <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endif %}
+            {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="container vh-100 p-1 my-3 bg-dark text-light ">
+        <div class="bg-dark">
+            <div class="space1 text-dark">
+                <h5 class="mb-0 pt-3 pr-3">Right Fit</h5>
+                <h5 class="mb-0 pb-3 pr-3">Schools Fit 4 You</h5>
+            </div>
+            <div class="space2"></div>
+            <div class="space3"></div>
+            <h1>Registration</h1>
+            <div class=" w-50 my-3 bg-dark text-light ">
+                <form action="/register" method="POST">
+                    {% csrf_token %}
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" class="form-control mb-3" placeholder="First Name">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" class="form-control mb-3" placeholder="Last Name">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control  mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control mb-3">
+                    <label for="confirm_pw">Confirm PW</label>
+                    <input type="password" name="confirm_password" class="form-control  mb-3">
+                    <input type="submit" value="Register" class="btn btn-primary btn-lg">
+                </form> <br>
+            </div>
+            <h6 class="my-3 text-center">{{ quote.text }} </h6>
+        </div>
+</body>
+
+</html>
