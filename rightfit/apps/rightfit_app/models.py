@@ -29,19 +29,32 @@ class UserManager (models.Manager):
     def login_validator(self, postData):
         login_errors = {}
         # add keys and values to errors dictionary for each invalid field
-        user_to_login= User.objects.filter(email=postData["email"])
-        if len(postData['email']) == 0:
+        user_to_login= User.objects.filter(email=postData["login_email"])
+        if len(postData['login_email']) == 0:
             print ('Did not find email in database')
             login_errors['invalid'] = 'Invalid login credentials'
         else:
-            user = User.objects.get (email = postData['email'])
-            if postData['password'] == user.password:
+            user = User.objects.get (email = postData['login_email'])
+            if postData['login_password'] == user.password:
                 print('Valid password, Login Success')
             else:
                 print("Invalid password, Login Unsuccessful")
                 login_errors['invalid'] = "Invalid login credentials."
         return login_errors
     
+    def student_validator(self, postData):
+        student_errors ={}
+        # add keys and values to errors dictionary for each invalid field
+        
+        if len(postData['gpa']) ==0:
+            student_errors['gpa_blank'] = 'Gpa can not be blank!!'
+        elif len(postData['gpa']) > 3:
+            student_errors['gpa_length'] = 'Gpa can not be more than 3 digits!!'
+        if len(postData['test_score']) ==0:
+            student_errors['test_score_blank'] = 'Test Score can not be blank!!' 
+        if (postData['test_score']) > 900 :
+            student_errors['test_score_num'] = 'Test Score is invaild !!' 
+        
 class User(models.Model):
     first_name = models.CharField(max_length = 45)
     last_name = models.CharField(max_length = 45)
@@ -51,11 +64,18 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     objects = UserManager() 
     
-class Account(models.Model):     
+class Activity(models.Model):
+    name = models.CharField(max_length = 254) 
+    
+class Major(models.Model):
+    name = models.CharField(max_length = 254)
+    
+class Student(models.Model):     
     gpa = models.DecimalField(max_digits = 3, decimal_places = 2)
     test_score = models.IntegerField()
-    activities = models.CharField( max_length = 254)
-    education_interest = models.CharField( max_length = 254)
+    parent =  models.ForeignKey(User, related_name ="students")
+    activities =  models.ManyToManyField(Activity, related_name ="students")
+    majors = models.ForeignKey( Major, related_name ="students")
     school_int =  models.CharField( max_length = 254)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
@@ -64,9 +84,11 @@ class Account(models.Model):
 class School(models.Model):
     name = models.CharField(max_length = 45) 
     enrollment = models.CharField(max_length = 254)
-    sports = models.CharField(max_length = 254)
+    activities = models.ManyToManyField(Activity, related_name ="schools")
     avg_test_score = models.IntegerField()
+    majors = models.ManyToManyField( Major, related_name ="schools")
     gpa = models.DecimalField(max_digits = 3, decimal_places = 2)
+    students = models.ManyToManyField(Student, related_name ="schools")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
         
